@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Trips.Application.Models;
 
 namespace Trips.Application.Interfaces
 {
-    public interface ITripService
+    public interface IParticipate
     {
-        public Task<TripModel> GetTripsAsync();
+        public Task<bool> ReisterAsync(string mailAddress);
     }
 }
