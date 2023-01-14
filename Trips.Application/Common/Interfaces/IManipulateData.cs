@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Trips.Application.Models;
-
-namespace Trips.Application.Interfaces
+﻿namespace Trips.Application.Common.Interfaces
 {
     public interface IManipulateData
     {

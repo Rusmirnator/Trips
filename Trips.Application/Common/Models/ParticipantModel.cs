@@ -1,4 +1,4 @@
-﻿namespace Trips.Application.Models
+﻿namespace Trips.Application.Common.Models
 {
     public class ParticipantModel
     {

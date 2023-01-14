@@ -1,15 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Trips.Application.Interfaces;
-using Trips.Application.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Trips.Application.Common.Interfaces;
+using Trips.Application.Common.Mappings;
+using Trips.Application.Common.Models;
 
 namespace Trips.Infrastructure.Services
 {
     public class TripService : IManipulateData
     {
+        private readonly ITripsDbContext context;
+
+        public TripService(ITripsDbContext context)
+        {
+            this.context = context;
+        }
+
         public Task<bool> CreateDatumAsync<T>(T newDatum)
         {
             throw new NotImplementedException();
@@ -20,9 +24,11 @@ namespace Trips.Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<T>> GetDataAsync<T>()
+        public async Task<IEnumerable<T>> GetDataAsync<T>()
         {
-            throw new NotImplementedException();
+            var data = (await context.Trips.ToListAsync()).Select(entity => entity.ToModel());
+
+            return data as IEnumerable<T> ?? Enumerable.Empty<T>();
         }
 
         public Task<IEnumerable<T>> GetDataBySearchTermAsync<T>()
