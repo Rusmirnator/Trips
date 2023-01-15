@@ -1,3 +1,4 @@
+using Trips.API.Middleware;
 using Trips.Infrastructure;
 
 namespace Trips.API
@@ -30,6 +31,8 @@ namespace Trips.API
 
             app.MapControllers();
 
+            app.UseMiddleware<ErrorHandlingMeddleware>();
+
             return app;
         }
 
@@ -38,6 +41,7 @@ namespace Trips.API
             services.AddControllers(options => options.SuppressAsyncSuffixInActionNames = false);
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
+            services.AddTransient<ErrorHandlingMeddleware>();
             services.AddInfrastructureServices(configuration.GetValue("DataSource:UseInMemoryDatabase", false));
         }
     }

@@ -23,16 +23,14 @@ namespace Trips.Infrastructure
         {
             if (useInMemoryDb)
             {
-                /// registered as singleton just for this particular case 
                 services.AddDbContext<TripsDbContext>(options =>
                 {
                     options.UseInMemoryDatabase("DummyDb");
-                }, ServiceLifetime.Singleton);
+                }, ServiceLifetime.Scoped);
 
                 return services;
             }
 
-            /// registered as scoped (default)
             services.AddDbContext<TripsDbContext>(options =>
             {
                 /// not available with current nuget packages
@@ -48,8 +46,7 @@ namespace Trips.Infrastructure
 
             if (useInMemoryDb)
             {
-                /// registered as singleton just for this particular case 
-                services.AddSingleton<IApplicationDbContext>(provider =>
+                services.AddScoped<ITripsDbContext>(provider =>
                 {
                     var context = provider.GetRequiredService<TripsDbContext>();
 
@@ -62,7 +59,7 @@ namespace Trips.Infrastructure
                 return services;
             }
 
-            services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<TripsDbContext>());
+            services.AddScoped<ITripsDbContext>(provider => provider.GetRequiredService<TripsDbContext>());
 
             return services;
         }

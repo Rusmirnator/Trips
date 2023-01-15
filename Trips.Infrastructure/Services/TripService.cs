@@ -12,11 +12,11 @@ namespace Trips.Infrastructure.Services
     {
         /// these regions below is an example of how i like to organise classes, structs etc.
         #region Fields & Properties
-        private readonly IApplicationDbContext context;
+        private readonly ITripsDbContext context;
         #endregion
 
         #region CTOR
-        public TripService(IApplicationDbContext context)
+        public TripService(ITripsDbContext context)
         {
             this.context = context;
         }

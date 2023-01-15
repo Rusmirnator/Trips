@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System.Data.Common;
 using Trips.Application.Common.Interfaces;
 using Trips.Application.Common.Models;
 using Trips.Domain.Entities;
@@ -8,7 +7,7 @@ using Trips.Infrastructure.Persistence.Configurations;
 
 namespace Trips.Infrastructure.Persistence
 {
-    public class TripsDbContext : DbContext, IApplicationDbContext
+    public class TripsDbContext : DbContext, ITripsDbContext
     {
         #region Fields & Properties
         private readonly ILogger<TripsDbContext> logger;
