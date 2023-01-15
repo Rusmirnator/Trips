@@ -69,21 +69,33 @@ namespace Trips.Infrastructure.Services
         {
             Trip? existingTrip = await GetTripByNameAsync(newData.Name, false);
 
-            if (existingTrip is null)
+            if (existingTrip is not null)
             {
-                existingTrip = newData.Create();
-
-                _ = await context.Trips.AddAsync(existingTrip);
+                return new OperationResultModel(false, $"Trip with the given name '{newData.Name}' already exists!");
             }
+
+            existingTrip = newData.Create();
+
+            _ = await context.Trips.AddAsync(existingTrip);
 
             return await context.SaveChangesAsync();
         }
 
         public async Task<IConveyOperationResult> UpdateTripAsync(TripDetailsRequestModel updatedData)
         {
-            Trip? existingTrip = await GetTripByNameAsync(updatedData.Origin?.Name, false);
+            if (updatedData.OutdatedData is null)
+            {
+                return new OperationResultModel(false, $"Input data is not sufficient - Outdated data not provided!");
+            }
 
-            existingTrip?.Update(updatedData);
+            Trip? existingTrip = await GetTripByNameAsync(updatedData.OutdatedData?.Name, false);
+
+            if (existingTrip is null)
+            {
+                return new OperationResultModel(false, $"Trip with the given name '{updatedData.OutdatedData!.Name}' not exists!");
+            }
+
+            existingTrip.Update(updatedData);
 
             return await context.SaveChangesAsync();
         }
@@ -124,10 +136,12 @@ namespace Trips.Infrastructure.Services
         {
             Trip? existingTrip = await GetTripByNameAsync(deletedData.Name, false);
 
-            if (existingTrip is not null)
+            if (existingTrip is null)
             {
-                context.Trips.Remove(existingTrip);
+                return new OperationResultModel(false, $"Trip with the given name '{deletedData.Name}' not exists!");
             }
+
+            _ = context.Trips.Remove(existingTrip);
 
             return await context.SaveChangesAsync();
         }
