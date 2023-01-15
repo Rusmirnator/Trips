@@ -49,6 +49,7 @@ namespace Trips.Infrastructure.Persistence
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfiguration(new TripConfiguration())
+                .ApplyConfiguration(new ParticipantConfiguration())
                 .ApplyConfiguration(new TripParticipantConfiguration());
         }
     }
