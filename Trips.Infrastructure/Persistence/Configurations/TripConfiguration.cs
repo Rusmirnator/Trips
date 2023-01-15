@@ -26,7 +26,8 @@ namespace Trips.Infrastructure.Persistence.Configurations
                 new Trip
                 {
                     Id = 1,
-                    Name = "Switzerland",
+                    Name = "Vintage Experience",
+                    Country = "Switzerland",
                     StartDate = DateTime.Now.AddMonths(1),
                     Description = "Prepare for great adventure!\nParticipate in vintage train trail and explore " +
                     "nooks of an late industrial era."
@@ -34,7 +35,8 @@ namespace Trips.Infrastructure.Persistence.Configurations
                 new Trip
                 {
                     Id = 2,
-                    Name = "Spain",
+                    Name = "Mountain Dew",
+                    Country = "Spain",
                     StartDate = DateTime.Now.AddDays(14),
                     Description = "Let's hike!\nTake your backpack and feel the clear air of southern mountains."
                 });

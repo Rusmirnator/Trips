@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Trips.Application.Common.Interfaces;
 using Trips.Application.Common.Models;
 using Trips.Domain.Entities;
+using Trips.Infrastructure.Persistence.Configurations;
 
 namespace Trips.Infrastructure.Persistence
 {
@@ -17,11 +18,6 @@ namespace Trips.Infrastructure.Persistence
         #endregion
 
         #region CTOR
-        public TripsDbContext(ILogger<TripsDbContext> logger)
-        {
-            this.logger = logger;
-        }
-
         public TripsDbContext(DbContextOptions<TripsDbContext> options, ILogger<TripsDbContext> logger)
             : base(options)
         {
@@ -49,5 +45,11 @@ namespace Trips.Infrastructure.Persistence
             return new OperationResultModel(false, errorMessage);
         }
         #endregion
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.ApplyConfiguration(new TripConfiguration())
+                .ApplyConfiguration(new TripParticipantConfiguration());
+        }
     }
 }

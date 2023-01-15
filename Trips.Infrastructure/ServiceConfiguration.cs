@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Trips.Application.Common.Interfaces;
 using Trips.Application.Trips.Interfaces;
 using Trips.Infrastructure.Persistence;
 using Trips.Infrastructure.Services;
@@ -13,7 +14,7 @@ namespace Trips.Infrastructure
             /// somewhat overkill for current case, but in commercial one i like to organise it 
             /// like that to separate services by function
             services.AddDataAccess(useInMemoryDb)
-                    .AddServices();
+                    .AddServices(useInMemoryDb);
 
             return services;
         }
@@ -41,9 +42,27 @@ namespace Trips.Infrastructure
             return services;
         }
 
-        private static IServiceCollection AddServices(this IServiceCollection services)
+        private static IServiceCollection AddServices(this IServiceCollection services, bool useInMemoryDb)
         {
             services.AddScoped<ITripService, TripService>();
+
+            if (useInMemoryDb)
+            {
+                /// registered as singleton just for this particular case 
+                services.AddSingleton<IApplicationDbContext>(provider =>
+                {
+                    var context = provider.GetRequiredService<TripsDbContext>();
+
+                    /// needed for seeding data
+                    context.Database.EnsureCreated();
+
+                    return context;
+                });
+
+                return services;
+            }
+
+            services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<TripsDbContext>());
 
             return services;
         }

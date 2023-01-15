@@ -1,30 +1,45 @@
+using Microsoft.AspNetCore.Hosting;
 using Trips.Infrastructure;
 
-var builder = WebApplication.CreateBuilder(args);
-
-ConfigureServices(builder.Services, builder.Configuration);
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+namespace Trips.API
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            CreateApp(args).Run();
+        }
 
-app.UseHttpsRedirection();
+        public static WebApplication CreateApp(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
 
-app.UseAuthorization();
+            ConfigureServices(builder.Services, builder.Configuration);
 
-app.MapControllers();
+            var app = builder.Build();
 
-app.Run();
+            // Configure the HTTP request pipeline.
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
 
-static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
-{
-    services.AddControllers();
-    services.AddEndpointsApiExplorer();
-    services.AddSwaggerGen();
-    services.AddInfrastructureServices(configuration.GetValue("DataSource:UseInMemoryDatabase", false));
+            app.UseHttpsRedirection();
+
+            app.UseAuthorization();
+
+            app.MapControllers();
+
+            return app;
+        }
+
+        private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddControllers();
+            services.AddEndpointsApiExplorer();
+            services.AddSwaggerGen();
+            services.AddInfrastructureServices(configuration.GetValue("DataSource:UseInMemoryDatabase", false));
+        }
+    }
 }
