@@ -94,21 +94,17 @@ namespace Trips.Infrastructure.Services
 
             Participant? existingParticipant = await GetParticipantByMailAsync(participantData.MailAddress, true);
 
-            if (existingTrip?.TripParticipants.Any(tp => tp.Participant == existingParticipant) == true)
+            if (existingTrip is null)
+            {
+                return new OperationResultModel(false, $"Trip with the given name '{participantData.TripName}' does not exist!");
+            }
+
+            if (existingTrip!.TripParticipants.Any(tp => tp.Participant!.Id == existingParticipant?.Id == true))
             {
                 return new OperationResultModel(false, "Provided participant is already registered for the trip!");
             }
 
             existingParticipant ??= participantData.Create();
-
-            _ = await context.Participants.AddAsync(existingParticipant);
-
-            IConveyOperationResult operationResult = await context.SaveChangesAsync();
-
-            if (!operationResult.IsSuccessful)
-            {
-                return operationResult;
-            }
 
             existingTrip!.TripParticipants.Add(
                 new TripParticipant

@@ -3,6 +3,6 @@
     public interface IConveyOperationResult
     {
         public bool IsSuccessful { get; }
-        public string? ResultMessage { get; }
+        public string? Message { get; }
     }
 }

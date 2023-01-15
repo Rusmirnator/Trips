@@ -30,7 +30,8 @@ namespace Trips.Infrastructure.Persistence.Configurations
                     Country = "Switzerland",
                     StartDate = DateTime.Now.AddMonths(1),
                     Description = "Prepare for great adventure!\nParticipate in vintage train trail and explore " +
-                    "nooks of an late industrial era."
+                    "nooks of an late industrial era.",
+                    NumberOfSeats = 338
                 },
                 new Trip
                 {
@@ -38,7 +39,8 @@ namespace Trips.Infrastructure.Persistence.Configurations
                     Name = "Mountain Dew",
                     Country = "Spain",
                     StartDate = DateTime.Now.AddDays(14),
-                    Description = "Let's hike!\nTake your backpack and feel the clear air of southern mountains."
+                    Description = "Let's hike!\nTake your backpack and feel the clear air of southern mountains.",
+                    NumberOfSeats = 8
                 });
         }
     }

@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Hosting;
 using Trips.Infrastructure;
 
 namespace Trips.API
@@ -36,7 +35,7 @@ namespace Trips.API
 
         private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddControllers();
+            services.AddControllers(options => options.SuppressAsyncSuffixInActionNames = false);
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
             services.AddInfrastructureServices(configuration.GetValue("DataSource:UseInMemoryDatabase", false));

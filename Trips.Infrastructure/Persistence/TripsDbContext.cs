@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Data.Common;
 using Trips.Application.Common.Interfaces;
 using Trips.Application.Common.Models;
 using Trips.Domain.Entities;
@@ -35,7 +36,7 @@ namespace Trips.Infrastructure.Persistence
 
                 return new OperationResultModel(true, errorMessage);
             }
-            catch (Exception ex) when (ex is DbUpdateException or DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
                 errorMessage = ex.Message;
 
