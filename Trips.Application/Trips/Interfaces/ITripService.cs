@@ -5,12 +5,12 @@ namespace Trips.Application.Trips.Interfaces
 {
     public interface ITripService
     {
-        public Task<IConveyOperationResult> CreateTripAsync(TripDetailsModel newData);
-        public Task<IEnumerable<TripModel>> GetTripsAsync();
-        public Task<IEnumerable<TripModel>> GetTripsBySearchTermAsync(string searchTerm);
-        public Task<TripDetailsModel?> GetTripDetailsAsync(TripModel selectedTrip);
-        public Task<IConveyOperationResult> UpdateTripAsync(string oldDataIdentifier, TripDetailsModel updatedData);
-        public Task<IConveyOperationResult> DeleteTripAsync(TripModel deletedData);
-        public Task<IConveyOperationResult> RegisterParticipantAsync(ParticipantModel participantData, TripModel tripData);
+        public Task<IConveyOperationResult> CreateTripAsync(TripDetailsRequestModel newData);
+        public Task<IEnumerable<TripResponseModel>> GetTripsAsync();
+        public Task<IEnumerable<TripResponseModel>> GetTripsBySearchTermAsync(string searchTerm);
+        public Task<TripDetailsResponseModel?> GetTripDetailsAsync(string tripNameIdentifier);
+        public Task<IConveyOperationResult> UpdateTripAsync(TripDetailsRequestModel updatedData);
+        public Task<IConveyOperationResult> DeleteTripAsync(TripRequestModel deletedData);
+        public Task<IConveyOperationResult> RegisterParticipantAsync(ParticipantRequestModel participantData);
     }
 }

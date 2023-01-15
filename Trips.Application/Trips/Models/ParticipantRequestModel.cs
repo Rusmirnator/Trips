@@ -1,7 +1,8 @@
 ﻿namespace Trips.Application.Trips.Models
 {
-    public class ParticipantModel
+    public class ParticipantRequestModel
     {
         public string? MailAddress { get; set; }
+        public string? TripName { get; set; }
     }
 }

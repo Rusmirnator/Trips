@@ -17,16 +17,11 @@ namespace Trips.API.Controllers
 
         [HttpGet]
         [Route("trips")]
-        public async Task<ActionResult<IEnumerable<TripModel>>> GetTripsAsync()
+        public async Task<ActionResult<IEnumerable<TripResponseModel>>> GetTripsAsync()
         {
-            IEnumerable<TripModel> trips = await tripService.GetTripsAsync();
+            IEnumerable<TripResponseModel> trips = await tripService.GetTripsAsync();
 
-            if (trips.Any())
-            {
-                return Ok(trips);
-            }
-
-            return BadRequest("");
+            return Ok(trips);
         }
     }
 }

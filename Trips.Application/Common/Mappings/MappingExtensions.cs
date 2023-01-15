@@ -5,14 +5,14 @@ namespace Trips.Application.Common.Mappings
 {
     public static class MappingExtensions
     {
-        public static TripModel? ToModel(this Trip entity)
+        public static TripResponseModel? ToModel(this Trip entity)
         {
             if (entity is null)
             {
                 return null;
             }
 
-            return new TripModel
+            return new TripResponseModel
             {
                 Name = entity.Name,
                 Country = entity.Country,
@@ -20,14 +20,14 @@ namespace Trips.Application.Common.Mappings
             };
         }
 
-        public static TripDetailsModel? ToDetailedModel(this Trip entity)
+        public static TripDetailsResponseModel? ToDetailedModel(this Trip entity)
         {
             if (entity is null)
             {
                 return null;
             }
 
-            return new TripDetailsModel
+            return new TripDetailsResponseModel
             {
                 Name = entity.Name,
                 Country = entity.Country,
@@ -37,7 +37,7 @@ namespace Trips.Application.Common.Mappings
             };
         }
 
-        public static void Update(this Trip existingData, TripDetailsModel updatedData)
+        public static void Update(this Trip existingData, TripDetailsRequestModel updatedData)
         {
             if (updatedData is not null)
             {
@@ -49,7 +49,7 @@ namespace Trips.Application.Common.Mappings
             }
         }
 
-        public static Trip Create(this TripDetailsModel newData)
+        public static Trip Create(this TripDetailsRequestModel newData)
         {
             Trip newEntry = new();
 
@@ -61,7 +61,7 @@ namespace Trips.Application.Common.Mappings
             return newEntry;
         }
 
-        public static Participant Create(this ParticipantModel newData)
+        public static Participant Create(this ParticipantRequestModel newData)
         {
             return new Participant
             {

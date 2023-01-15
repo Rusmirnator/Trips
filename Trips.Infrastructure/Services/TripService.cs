@@ -25,9 +25,9 @@ namespace Trips.Infrastructure.Services
         #region Public API
 
         #region READ
-        public async Task<TripDetailsModel?> GetTripDetailsAsync(TripModel selectedTrip)
+        public async Task<TripDetailsResponseModel?> GetTripDetailsAsync(string tripNameIdentifier)
         {
-            Trip? existingTrip = await context.Trips.FirstOrDefaultAsync(e => e.Name == selectedTrip.Name);
+            Trip? existingTrip = await context.Trips.FirstOrDefaultAsync(e => e.Name == tripNameIdentifier);
 
             if (existingTrip is not null)
             {
@@ -37,19 +37,19 @@ namespace Trips.Infrastructure.Services
             return null;
         }
 
-        public async Task<IEnumerable<TripModel>> GetTripsAsync()
+        public async Task<IEnumerable<TripResponseModel>> GetTripsAsync()
         {
             List<Trip> existingTrips = await context.Trips.ToListAsync();
 
             if (!existingTrips.Any())
             {
-                return Enumerable.Empty<TripModel>();
+                return Enumerable.Empty<TripResponseModel>();
             }
 
             return existingTrips.Select(e => e.ToModel()!);
         }
 
-        public async Task<IEnumerable<TripModel>> GetTripsBySearchTermAsync(string searchTerm)
+        public async Task<IEnumerable<TripResponseModel>> GetTripsBySearchTermAsync(string searchTerm)
         {
             List<Trip> filteredTrips = await context.Trips
                                         .Where(e => e.Country == searchTerm)
@@ -57,7 +57,7 @@ namespace Trips.Infrastructure.Services
 
             if (!filteredTrips.Any())
             {
-                return Enumerable.Empty<TripModel>();
+                return Enumerable.Empty<TripResponseModel>();
             }
 
             return filteredTrips.Select(e => e.ToModel()!);
@@ -65,7 +65,7 @@ namespace Trips.Infrastructure.Services
         #endregion
 
         #region CREATE/UPDATE
-        public async Task<IConveyOperationResult> CreateTripAsync(TripDetailsModel newData)
+        public async Task<IConveyOperationResult> CreateTripAsync(TripDetailsRequestModel newData)
         {
             Trip? existingTrip = await GetTripByNameAsync(newData.Name, false);
 
@@ -79,18 +79,18 @@ namespace Trips.Infrastructure.Services
             return await context.SaveChangesAsync();
         }
 
-        public async Task<IConveyOperationResult> UpdateTripAsync(string oldDataIdentifier, TripDetailsModel updatedData)
+        public async Task<IConveyOperationResult> UpdateTripAsync(TripDetailsRequestModel updatedData)
         {
-            Trip? existingTrip = await GetTripByNameAsync(oldDataIdentifier, false);
+            Trip? existingTrip = await GetTripByNameAsync(updatedData.Origin?.Name, false);
 
             existingTrip?.Update(updatedData);
 
             return await context.SaveChangesAsync();
         }
 
-        public async Task<IConveyOperationResult> RegisterParticipantAsync(ParticipantModel participantData, TripModel tripData)
+        public async Task<IConveyOperationResult> RegisterParticipantAsync(ParticipantRequestModel participantData)
         {
-            Trip? existingTrip = await GetTripByNameAsync(tripData.Name, true);
+            Trip? existingTrip = await GetTripByNameAsync(participantData.TripName, true);
 
             Participant? existingParticipant = await GetParticipantByMailAsync(participantData.MailAddress, true);
 
@@ -124,7 +124,7 @@ namespace Trips.Infrastructure.Services
         #endregion
 
         #region DELETE
-        public async Task<IConveyOperationResult> DeleteTripAsync(TripModel deletedData)
+        public async Task<IConveyOperationResult> DeleteTripAsync(TripRequestModel deletedData)
         {
             Trip? existingTrip = await GetTripByNameAsync(deletedData.Name, false);
 

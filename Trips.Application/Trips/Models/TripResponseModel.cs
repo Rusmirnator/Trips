@@ -1,6 +1,6 @@
 ﻿namespace Trips.Application.Trips.Models
 {
-    public class TripModel
+    public class TripResponseModel
     {
         public string? Name { get; set; }
         public string? Country { get; set; }
