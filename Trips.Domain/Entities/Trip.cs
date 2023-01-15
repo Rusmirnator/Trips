@@ -17,12 +17,11 @@ namespace Trips.Domain.Entities
         public DateTime? StartDate { get; set; }
         [Range(0,100, ErrorMessage = "Number of seats must have a value between 0 and 100!")]
         public int? NumberOfSeats { get; set; }
-        [InverseProperty(nameof(Participant.Trip))]
-        public virtual ICollection<Participant>? Participants { get; set; }
+        public virtual ICollection<TripParticipant> TripParticipants { get; set; }
 
         public Trip()
         {
-            Participants = new HashSet<Participant>();
+            TripParticipants = new HashSet<TripParticipant>();
         }
     }
 }

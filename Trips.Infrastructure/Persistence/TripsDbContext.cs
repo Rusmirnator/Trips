@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System.Data;
-using System.Data.Common;
 using Trips.Application.Common.Interfaces;
 using Trips.Domain.Entities;
 
@@ -9,11 +7,15 @@ namespace Trips.Infrastructure.Persistence
 {
     public class TripsDbContext : DbContext, ITripsDbContext
     {
+        #region Fields & Properties
         private readonly ILogger<TripsDbContext> logger;
 
         public DbSet<Trip> Trips { get; private set; }
         public DbSet<Participant> Participants { get; private set; }
+        public DbSet<TripParticipant> TripParticipants { get; private set; }
+        #endregion
 
+        #region CTOR
         public TripsDbContext(ILogger<TripsDbContext> logger)
         {
             this.logger = logger;
@@ -24,7 +26,9 @@ namespace Trips.Infrastructure.Persistence
         {
             this.logger = logger;
         }
+        #endregion
 
+        #region Public API
         public async Task<int> SaveChangesAsync()
         {
             try
@@ -37,5 +41,6 @@ namespace Trips.Infrastructure.Persistence
             }
             return 0;
         }
+        #endregion
     }
 }

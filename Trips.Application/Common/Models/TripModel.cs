@@ -1,6 +1,4 @@
-﻿using Trips.Domain.Entities;
-
-namespace Trips.Application.Common.Models
+﻿namespace Trips.Application.Common.Models
 {
     public class TripModel
     {
