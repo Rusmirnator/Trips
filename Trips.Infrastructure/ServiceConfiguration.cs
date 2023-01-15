@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Trips.Application.Common.Interfaces;
+using Trips.Application.Trips.Interfaces;
 using Trips.Infrastructure.Persistence;
 using Trips.Infrastructure.Services;
 

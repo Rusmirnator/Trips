@@ -1,4 +1,4 @@
-﻿namespace Trips.Application.Common.Models
+﻿namespace Trips.Application.Trips.Models
 {
     public class TripModel
     {

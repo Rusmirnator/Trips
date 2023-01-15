@@ -1,4 +1,4 @@
-﻿using Trips.Application.Common.Models;
+﻿using Trips.Application.Trips.Models;
 using Trips.Domain.Entities;
 
 namespace Trips.Application.Common.Mappings

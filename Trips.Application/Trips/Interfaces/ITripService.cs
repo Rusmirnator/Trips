@@ -1,6 +1,6 @@
-﻿using Trips.Application.Common.Models;
+﻿using Trips.Application.Trips.Models;
 
-namespace Trips.Application.Common.Interfaces
+namespace Trips.Application.Trips.Interfaces
 {
     public interface ITripService
     {

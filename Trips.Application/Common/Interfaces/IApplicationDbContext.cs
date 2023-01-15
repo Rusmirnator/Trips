@@ -3,7 +3,7 @@ using Trips.Domain.Entities;
 
 namespace Trips.Application.Common.Interfaces
 {
-    public interface ITripsDbContext
+    public interface IApplicationDbContext
     {
         public DbSet<Trip> Trips { get; }
         public DbSet<Participant> Participants { get; }

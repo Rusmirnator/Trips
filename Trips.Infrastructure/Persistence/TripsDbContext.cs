@@ -5,7 +5,7 @@ using Trips.Domain.Entities;
 
 namespace Trips.Infrastructure.Persistence
 {
-    public class TripsDbContext : DbContext, ITripsDbContext
+    public class TripsDbContext : DbContext, IApplicationDbContext
     {
         #region Fields & Properties
         private readonly ILogger<TripsDbContext> logger;

@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Trips.Application.Common.Interfaces;
 using Trips.Application.Common.Mappings;
-using Trips.Application.Common.Models;
+using Trips.Application.Trips.Interfaces;
+using Trips.Application.Trips.Models;
 using Trips.Domain.Entities;
 
 namespace Trips.Infrastructure.Services
@@ -10,11 +11,11 @@ namespace Trips.Infrastructure.Services
     {
         /// these regions below is an example of how i like to organise classes, structs etc.
         #region Fields & Properties
-        private readonly ITripsDbContext context;
+        private readonly IApplicationDbContext context;
         #endregion
 
         #region CTOR
-        public TripService(ITripsDbContext context)
+        public TripService(IApplicationDbContext context)
         {
             this.context = context;
         }
