@@ -16,6 +16,28 @@ namespace Trips.Infrastructure.Persistence.Configurations
 
             _ = builder.Property(p => p.Description)
                             .IsUnicode();
+
+            SeedData(builder);
+        }
+
+        private static void SeedData(EntityTypeBuilder<Trip> builder)
+        {
+            builder.HasData(
+                new Trip
+                {
+                    Id = 1,
+                    Name = "Switzerland",
+                    StartDate = DateTime.Now.AddMonths(1),
+                    Description = "Prepare for great adventure!\nParticipate in vintage train trail and explore " +
+                    "nooks of an late industrial era."
+                },
+                new Trip
+                {
+                    Id = 2,
+                    Name = "Spain",
+                    StartDate = DateTime.Now.AddDays(14),
+                    Description = "Let's hike!\nTake your backpack and feel the clear air of southern mountains."
+                });
         }
     }
 }

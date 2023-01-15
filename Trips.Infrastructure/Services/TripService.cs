@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Trips.Application.Common.Interfaces;
 using Trips.Application.Common.Mappings;
+using Trips.Application.Common.Models;
 using Trips.Application.Trips.Interfaces;
 using Trips.Application.Trips.Models;
 using Trips.Domain.Entities;
@@ -64,7 +65,7 @@ namespace Trips.Infrastructure.Services
         #endregion
 
         #region CREATE/UPDATE
-        public async Task<bool> CreateTripAsync(TripDetailsModel newData)
+        public async Task<IConveyOperationResult> CreateTripAsync(TripDetailsModel newData)
         {
             Trip? existingTrip = await GetTripByNameAsync(newData.Name, false);
 
@@ -75,19 +76,19 @@ namespace Trips.Infrastructure.Services
                 _ = await context.Trips.AddAsync(existingTrip);
             }
 
-            return await context.SaveChangesAsync() > 0;
+            return await context.SaveChangesAsync();
         }
 
-        public async Task<bool> UpdateTripAsync(string oldDataIdentifier, TripDetailsModel updatedData)
+        public async Task<IConveyOperationResult> UpdateTripAsync(string oldDataIdentifier, TripDetailsModel updatedData)
         {
             Trip? existingTrip = await GetTripByNameAsync(oldDataIdentifier, false);
 
             existingTrip?.Update(updatedData);
 
-            return await context.SaveChangesAsync() > 0;
+            return await context.SaveChangesAsync();
         }
 
-        public async Task<bool> RegisterParticipantAsync(ParticipantModel participantData, TripModel tripData)
+        public async Task<IConveyOperationResult> RegisterParticipantAsync(ParticipantModel participantData, TripModel tripData)
         {
             Trip? existingTrip = await GetTripByNameAsync(tripData.Name, true);
 
@@ -95,16 +96,18 @@ namespace Trips.Infrastructure.Services
 
             if (existingTrip?.TripParticipants.Any(tp => tp.Participant == existingParticipant) == true)
             {
-                return false;
+                return new OperationResultModel(false, "Provided participant is already registered for the trip!");
             }
 
             existingParticipant ??= participantData.Create();
 
             _ = await context.Participants.AddAsync(existingParticipant);
 
-            if (await context.SaveChangesAsync() == 0)
+            IConveyOperationResult operationResult = await context.SaveChangesAsync();
+
+            if (!operationResult.IsSuccessful)
             {
-                return false;
+                return operationResult;
             }
 
             existingTrip!.TripParticipants.Add(
@@ -116,12 +119,12 @@ namespace Trips.Infrastructure.Services
                     Participant = existingParticipant
                 });
 
-            return await context.SaveChangesAsync() > 0;
+            return await context.SaveChangesAsync();
         }
         #endregion
 
         #region DELETE
-        public async Task<bool> DeleteTripAsync(TripModel deletedData)
+        public async Task<IConveyOperationResult> DeleteTripAsync(TripModel deletedData)
         {
             Trip? existingTrip = await GetTripByNameAsync(deletedData.Name, false);
 
@@ -130,7 +133,7 @@ namespace Trips.Infrastructure.Services
                 context.Trips.Remove(existingTrip);
             }
 
-            return await context.SaveChangesAsync() > 0;
+            return await context.SaveChangesAsync();
         }
         #endregion
 

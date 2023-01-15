@@ -14,8 +14,4 @@
     <ProjectReference Include="..\Trips.Domain\Trips.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Common\Models\" />
-  </ItemGroup>
-
 </Project>

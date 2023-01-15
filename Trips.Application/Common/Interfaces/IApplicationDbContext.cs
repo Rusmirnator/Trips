@@ -8,6 +8,6 @@ namespace Trips.Application.Common.Interfaces
         public DbSet<Trip> Trips { get; }
         public DbSet<Participant> Participants { get; }
         public DbSet<TripParticipant> TripParticipants { get; }
-        public Task<int> SaveChangesAsync();
+        public Task<IConveyOperationResult> SaveChangesAsync();
     }
 }

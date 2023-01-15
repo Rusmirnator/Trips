@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Trips.Application.Common.Interfaces;
+using Trips.Application.Common.Models;
 using Trips.Domain.Entities;
 
 namespace Trips.Infrastructure.Persistence
@@ -29,17 +30,23 @@ namespace Trips.Infrastructure.Persistence
         #endregion
 
         #region Public API
-        public async Task<int> SaveChangesAsync()
+        public async Task<IConveyOperationResult> SaveChangesAsync()
         {
+            string errorMessage = string.Empty;
             try
             {
-                return await base.SaveChangesAsync();
+                _ = await base.SaveChangesAsync();
+
+                return new OperationResultModel(true, errorMessage);
             }
             catch (Exception ex) when (ex is DbUpdateException or DbUpdateConcurrencyException)
             {
-                logger.LogError(ex.Message);
+                errorMessage = ex.Message;
+
+                logger.LogError(errorMessage);
             }
-            return 0;
+
+            return new OperationResultModel(false, errorMessage);
         }
         #endregion
     }
