@@ -95,6 +95,11 @@ namespace Trips.Infrastructure.Services
                 return new OperationResultModel(false, $"Trip with the given name '{updatedData.OutdatedData!.Name}' not exists!");
             }
 
+            if (await GetTripByNameAsync(updatedData.Name, false) is Trip duplicateTrip)
+            {
+                return new OperationResultModel(false, $"Trip with the given name '{duplicateTrip.Name}' already exists!");
+            }
+
             existingTrip.Update(updatedData);
 
             return await context.SaveChangesAsync();

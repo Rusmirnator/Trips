@@ -39,7 +39,7 @@ namespace Trips.Infrastructure.Persistence
             {
                 errorMessage = ex.Message;
 
-                logger.LogError(errorMessage);
+                logger?.LogError(errorMessage);
             }
 
             return new OperationResultModel(false, errorMessage);

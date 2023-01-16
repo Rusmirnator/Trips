@@ -36,7 +36,7 @@ namespace Trips.API
             return app;
         }
 
-        private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
+        public static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
             services.AddControllers(options => options.SuppressAsyncSuffixInActionNames = false);
             services.AddEndpointsApiExplorer();

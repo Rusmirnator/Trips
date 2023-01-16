@@ -102,6 +102,13 @@ namespace Trips.API.Controllers
             {
                 return UnprocessableEntity(ModelState);
             }
+            /// seems better to place it here than in service
+            if (patchData.MailAddress!.Contains(' ', StringComparison.Ordinal))
+            {
+                ModelState.AddModelError(nameof(patchData.MailAddress), "E-mail address cannot contain whitespaces!");
+
+                return UnprocessableEntity(ModelState);
+            }
 
             IConveyOperationResult result = await tripService.RegisterParticipantAsync(patchData);
 
