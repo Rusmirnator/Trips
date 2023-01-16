@@ -111,21 +111,24 @@ namespace Trips.Infrastructure.Services
                 return new OperationResultModel(false, $"Trip with the given name '{participantData.TripName}' does not exist!");
             }
 
-            if (existingTrip!.TripParticipants.Any(tp => tp.Participant!.Id == existingParticipant?.Id == true))
+            if (existingTrip!.TripParticipants.Any(tp => tp.ParticipantId == existingParticipant?.Id == true))
             {
                 return new OperationResultModel(false, "Provided participant is already registered for the trip!");
             }
 
             existingParticipant ??= participantData.Create();
 
-            existingTrip!.TripParticipants.Add(
-                new TripParticipant
-                {
-                    TripId = existingTrip.Id,
-                    ParticipantId = existingParticipant.Id,
-                    Trip = existingTrip,
-                    Participant = existingParticipant
-                });
+            TripParticipant relation = new()
+            {
+                TripId = existingTrip.Id,
+                ParticipantId = existingParticipant.Id,
+                Trip = existingTrip,
+                Participant = existingParticipant
+            };
+
+            existingTrip!.TripParticipants.Add(relation);
+
+            existingParticipant!.TripParticipants.Add(relation);
 
             return await context.SaveChangesAsync();
         }
