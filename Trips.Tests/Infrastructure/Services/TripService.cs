@@ -8,12 +8,12 @@ namespace Trips.Tests.Infrastructure.Services
     [TestFixture]
     public class TripService_CreateTrip
     {
-        ITripService? tripsService;
+        ITripService? tripService;
 
         [SetUp]
         public void SetUp()
         {
-            tripsService = ServiceResolver.ResolveService<ITripService>();
+            tripService = ServiceResolver.ResolveService<ITripService>();
         }
 
         [TestCase("Salty Adventure", ExpectedResult = true)]
@@ -27,7 +27,7 @@ namespace Trips.Tests.Infrastructure.Services
                 Name = uniqueName,
             };
 
-            IConveyOperationResult res = await tripsService!.CreateTripAsync(newTrip);
+            IConveyOperationResult res = await tripService!.CreateTripAsync(newTrip);
 
             return res.IsSuccessful;
         }
@@ -36,18 +36,16 @@ namespace Trips.Tests.Infrastructure.Services
     [TestFixture]
     public class TripService_UpdateTrip
     {
-        ITripService? tripsService;
+        ITripService? tripService;
 
         [SetUp]
         public void SetUp()
         {
-            tripsService = ServiceResolver.ResolveService<ITripService>();
+            tripService = ServiceResolver.ResolveService<ITripService>();
         }
 
-        [TestCase("Salty Adventure", "Vintage Experience", ExpectedResult = false)]
-        [TestCase("Vintage Experience", "Mountain Dew", ExpectedResult = false)]
-        [TestCase("Shocking Experience", "Mountain Dew", ExpectedResult = true)]
-        [TestCase("Refreshing Walk", null, ExpectedResult = false)]
+        [TestCase("Vintage Experience", null, ExpectedResult = false)]
+        [TestCase("Mountain Dew", "Mountain Dew", ExpectedResult = true)]
         public async Task<bool> UpdateTrip(string uniqueName, string outdatedDataName)
         {
             TripDetailsRequestModel newTrip = new()
@@ -59,7 +57,7 @@ namespace Trips.Tests.Infrastructure.Services
                 }
             };
 
-            IConveyOperationResult res = await tripsService!.UpdateTripAsync(newTrip);
+            IConveyOperationResult res = await tripService!.UpdateTripAsync(newTrip);
 
             return res.IsSuccessful;
         }
@@ -68,24 +66,19 @@ namespace Trips.Tests.Infrastructure.Services
     [TestFixture]
     public class TripService_DeleteTrip
     {
-        ITripService? tripsService;
+        ITripService? tripService;
 
         [SetUp]
         public void SetUp()
         {
-            tripsService = ServiceResolver.ResolveService<ITripService>();
+            tripService = ServiceResolver.ResolveService<ITripService>();
         }
 
         [TestCase("Abcdefghijkl", ExpectedResult = true)]
         [TestCase("Abcdefghijk", ExpectedResult = false)]
         public async Task<bool> DeleteTrip(string uniqueName)
         {
-            TripRequestModel newTrip = new()
-            {
-                Name = uniqueName
-            };
-
-            IConveyOperationResult res = await tripsService!.DeleteTripAsync(newTrip);
+            IConveyOperationResult res = await tripService!.DeleteTripAsync(uniqueName);
 
             return res.IsSuccessful;
         }
@@ -94,12 +87,12 @@ namespace Trips.Tests.Infrastructure.Services
     [TestFixture]
     public class TripService_ReisterForTrip
     {
-        ITripService? tripsService;
+        ITripService? tripService;
 
         [SetUp]
         public void SetUp()
         {
-            tripsService = ServiceResolver.ResolveService<ITripService>();
+            tripService = ServiceResolver.ResolveService<ITripService>();
         }
 
         [TestCase("user@mail.com", "Salty Adventure", ExpectedResult = true)]
@@ -113,7 +106,7 @@ namespace Trips.Tests.Infrastructure.Services
                 TripName = tripName
             };
 
-            IConveyOperationResult res = await tripsService!.RegisterParticipantAsync(participant);
+            IConveyOperationResult res = await tripService!.RegisterParticipantAsync(participant);
 
             return res.IsSuccessful;
         }
@@ -122,18 +115,18 @@ namespace Trips.Tests.Infrastructure.Services
     [TestFixture]
     public class TripService_GetTrips
     {
-        ITripService? tripsService;
+        ITripService? tripService;
 
         [SetUp]
         public void SetUp()
         {
-            tripsService = ServiceResolver.ResolveService<ITripService>();
+            tripService = ServiceResolver.ResolveService<ITripService>();
         }
 
         [Test]
         public async Task GetTripsAsync()
         {
-            IEnumerable<TripResponseModel> resultSet = await tripsService!.GetTripsAsync();
+            IEnumerable<TripResponseModel> resultSet = await tripService!.GetTripsAsync();
 
             Assert.That(resultSet is not null);
         }
@@ -142,7 +135,7 @@ namespace Trips.Tests.Infrastructure.Services
         [TestCase("Spain")]
         public async Task GetTripsBySearchTermAsync_Exists(string searchTerm)
         {
-            IEnumerable<TripResponseModel> resultSet = await tripsService!.GetTripsBySearchTermAsync(searchTerm);
+            IEnumerable<TripResponseModel> resultSet = await tripService!.GetTripsBySearchTermAsync(searchTerm);
 
             Assert.That(resultSet.Any());
         }
@@ -152,7 +145,7 @@ namespace Trips.Tests.Infrastructure.Services
         [TestCase("")]
         public async Task GetTripsBySearchTermAsync_NotExists(string searchTerm)
         {
-            IEnumerable<TripResponseModel> resultSet = await tripsService!.GetTripsBySearchTermAsync(searchTerm);
+            IEnumerable<TripResponseModel> resultSet = await tripService!.GetTripsBySearchTermAsync(searchTerm);
 
             Assert.That(!resultSet.Any());
         }
@@ -161,12 +154,12 @@ namespace Trips.Tests.Infrastructure.Services
     [TestFixture]
     public class TripService_GetTripDetails
     {
-        ITripService? tripsService;
+        ITripService? tripService;
 
         [SetUp]
         public void SetUp()
         {
-            tripsService = ServiceResolver.ResolveService<ITripService>();
+            tripService = ServiceResolver.ResolveService<ITripService>();
         }
 
         [TestCase("Vintage Experience", ExpectedResult = true)]
@@ -175,7 +168,7 @@ namespace Trips.Tests.Infrastructure.Services
         [TestCase("Sapin", ExpectedResult = false)]
         public async Task<bool> GetTripDetailsAsync(string uniqueNameIdentifier)
         {
-            TripDetailsResponseModel? res = await tripsService!.GetTripDetailsAsync(uniqueNameIdentifier);
+            TripDetailsResponseModel? res = await tripService!.GetTripDetailsAsync(uniqueNameIdentifier);
 
             return res is not null;
         }

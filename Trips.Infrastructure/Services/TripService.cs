@@ -95,7 +95,8 @@ namespace Trips.Infrastructure.Services
                 return new OperationResultModel(false, $"Trip with the given name '{updatedData.OutdatedData!.Name}' not exists!");
             }
 
-            if (await GetTripByNameAsync(updatedData.Name, false) is Trip duplicateTrip)
+            if (updatedData.OutdatedData!.Name?.Equals(existingTrip.Name, StringComparison.Ordinal) == false
+                && await GetTripByNameAsync(updatedData.Name, false) is Trip duplicateTrip)
             {
                 return new OperationResultModel(false, $"Trip with the given name '{duplicateTrip.Name}' already exists!");
             }
@@ -140,13 +141,13 @@ namespace Trips.Infrastructure.Services
         #endregion
 
         #region DELETE
-        public async Task<IConveyOperationResult> DeleteTripAsync(TripRequestModel deletedData)
+        public async Task<IConveyOperationResult> DeleteTripAsync(string uniqueNameIdentifier)
         {
-            Trip? existingTrip = await GetTripByNameAsync(deletedData.Name, false);
+            Trip? existingTrip = await GetTripByNameAsync(uniqueNameIdentifier, false);
 
             if (existingTrip is null)
             {
-                return new OperationResultModel(false, $"Trip with the given name '{deletedData.Name}' not exists!");
+                return new OperationResultModel(false, $"Trip with the given name '{uniqueNameIdentifier}' not exists!");
             }
 
             _ = context.Trips.Remove(existingTrip);

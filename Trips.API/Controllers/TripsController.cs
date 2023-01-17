@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using Trips.Application.Common.Interfaces;
 using Trips.Application.Trips.Interfaces;
 using Trips.Application.Trips.Models;
@@ -24,7 +25,6 @@ namespace Trips.API.Controllers
 
         #region GET
         [HttpGet]
-        [Route("trips")]
         public async Task<IActionResult> GetTripsAsync([FromQuery] string? searchTerm = null)
         {
             IEnumerable<TripResponseModel> trips =
@@ -34,8 +34,7 @@ namespace Trips.API.Controllers
             return Ok(trips);
         }
 
-        [HttpGet]
-        [Route("trips/details")]
+        [HttpGet("detail")]
         public async Task<IActionResult> GetTripDetailsAsync(
             [FromQuery] string uniqueNameIdentifier)
         {
@@ -43,7 +42,7 @@ namespace Trips.API.Controllers
 
             if (selectedTrip is null)
             {
-                return NotFound();
+                return NotFound(uniqueNameIdentifier);
             }
 
             return Ok(selectedTrip);
@@ -52,7 +51,6 @@ namespace Trips.API.Controllers
 
         #region POST
         [HttpPost]
-        [Route("trips")]
         public async Task<IActionResult> CreateTripAsync(
             [FromBody] TripDetailsRequestModel newData)
         {
@@ -74,7 +72,6 @@ namespace Trips.API.Controllers
 
         #region PUT
         [HttpPut]
-        [Route("trips")]
         public async Task<IActionResult> UpdateTripAsync([FromBody] TripDetailsRequestModel updatedData)
         {
             if (!ModelState.IsValid)
@@ -95,7 +92,6 @@ namespace Trips.API.Controllers
 
         #region PATCH
         [HttpPatch]
-        [Route("trips")]
         public async Task<IActionResult> RegisterForTripAsync([FromBody] ParticipantRequestModel patchData)
         {
             if (!ModelState.IsValid)
@@ -123,22 +119,21 @@ namespace Trips.API.Controllers
 
         #region DELETE
         [HttpDelete]
-        [Route("trips")]
-        public async Task<IActionResult> DeleteTripAsync([FromBody] TripRequestModel deletedData)
+        public async Task<IActionResult> DeleteTripAsync([FromQuery][Required] string uniqueNameIdentifier)
         {
             if (!ModelState.IsValid)
             {
                 return UnprocessableEntity(ModelState);
             }
 
-            IConveyOperationResult result = await tripService.DeleteTripAsync(deletedData);
+            IConveyOperationResult result = await tripService.DeleteTripAsync(uniqueNameIdentifier);
 
             if (!result.IsSuccessful)
             {
-                return BadRequest(result.Message);
+                return NotFound(result.Message);
             }
 
-            return AcceptedAtAction(nameof(DeleteTripAsync), deletedData);
+            return AcceptedAtAction(nameof(DeleteTripAsync), uniqueNameIdentifier);
         }
         #endregion
 

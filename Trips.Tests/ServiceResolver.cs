@@ -1,24 +1,27 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Trips.API;
 
 namespace Trips.Tests
 {
     public static class ServiceResolver
     {
-        public static IServiceProvider? ServiceProvider { get; private set; }
+        private static WebApplicationBuilder? appBuilder;
+        private static IServiceProvider? serviceProvider;
 
         public static T ResolveService<T>() where T : notnull
         {
-            if (ServiceProvider is null)
+            if (serviceProvider is null)
             {
-                var builder = WebApplication.CreateBuilder(Array.Empty<string>());
+                appBuilder = WebApplication.CreateBuilder(Array.Empty<string>());
+                appBuilder.Services.AddHttpClient();
 
-                API.Program.ConfigureServices(builder.Services, builder.Configuration);
+                Program.ConfigureServices(appBuilder.Services, appBuilder.Configuration);
 
-                ServiceProvider = builder.Services.BuildServiceProvider();
+                serviceProvider = appBuilder.Services.BuildServiceProvider();
             }
 
-            return ServiceProvider!.GetRequiredService<T>();
+            return serviceProvider!.GetRequiredService<T>();
         }
     }
 }

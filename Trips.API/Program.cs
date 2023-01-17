@@ -19,11 +19,10 @@ namespace Trips.API
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI();
 
             app.UseHttpsRedirection();
 
@@ -41,6 +40,7 @@ namespace Trips.API
             services.AddControllers(options => options.SuppressAsyncSuffixInActionNames = false);
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
+            services.AddRouting(x => x.LowercaseUrls = true);
             services.AddTransient<ErrorHandlingMeddleware>();
             services.AddInfrastructureServices(configuration.GetValue("DataSource:UseInMemoryDatabase", false));
         }

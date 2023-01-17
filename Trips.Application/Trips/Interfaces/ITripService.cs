@@ -10,7 +10,7 @@ namespace Trips.Application.Trips.Interfaces
         public Task<IEnumerable<TripResponseModel>> GetTripsBySearchTermAsync(string searchTerm);
         public Task<TripDetailsResponseModel?> GetTripDetailsAsync(string tripNameIdentifier);
         public Task<IConveyOperationResult> UpdateTripAsync(TripDetailsRequestModel updatedData);
-        public Task<IConveyOperationResult> DeleteTripAsync(TripRequestModel deletedData);
+        public Task<IConveyOperationResult> DeleteTripAsync(string uniqueNameIdentifier);
         public Task<IConveyOperationResult> RegisterParticipantAsync(ParticipantRequestModel participantData);
     }
 }
