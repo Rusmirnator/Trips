@@ -5,7 +5,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using Trips.API;
 
-namespace Trips.Tests.Base
+namespace Trips.IntegrationTests.Base
 {
     /// <summary>
     /// Base class for all http involved TestFixtures. Contains common methods and overridable setup.

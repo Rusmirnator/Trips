@@ -1,9 +1,9 @@
 ﻿using NUnit.Framework;
 using Trips.Application.Trips.Models;
 using System.Net;
-using Trips.Tests.Base;
+using Trips.IntegrationTests.Base;
 
-namespace Trips.Tests.API.Controllers
+namespace Trips.IntegrationTests.API.Controllers
 {
     [TestFixture]
     public class TripsController_GET : HttpTestFixtureBase
