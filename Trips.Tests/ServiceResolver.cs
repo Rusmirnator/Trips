@@ -14,7 +14,6 @@ namespace Trips.Tests
             if (serviceProvider is null)
             {
                 appBuilder = WebApplication.CreateBuilder(Array.Empty<string>());
-                appBuilder.Services.AddHttpClient();
 
                 Program.ConfigureServices(appBuilder.Services, appBuilder.Configuration);
 

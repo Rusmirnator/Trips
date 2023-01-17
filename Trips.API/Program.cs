@@ -3,7 +3,7 @@ using Trips.Infrastructure;
 
 namespace Trips.API
 {
-    public class Program
+    public partial class Program
     {
         public static void Main(string[] args)
         {

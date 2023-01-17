@@ -18,5 +18,8 @@
     <ProjectReference Include="..\Trips.Application\Trips.Application.csproj" />
     <ProjectReference Include="..\Trips.Infrastructure\Trips.Infrastructure.csproj" />
   </ItemGroup>
-
+	
+    <ItemGroup>
+	    <InternalsVisibleTo Include="Trips.Tests" />
+    </ItemGroup>
 </Project>

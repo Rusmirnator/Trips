@@ -161,7 +161,7 @@ namespace Trips.API.Controllers
                 return NotFound(result.Message);
             }
 
-            return AcceptedAtAction(nameof(DeleteTripAsync), uniqueNameIdentifier);
+            return Accepted();
         }
         #endregion
 

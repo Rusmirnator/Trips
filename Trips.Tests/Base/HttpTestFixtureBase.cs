@@ -1,7 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Mvc.Testing;
+using Newtonsoft.Json;
 using NUnit.Framework;
 using System.Net.Http.Headers;
 using System.Text;
+using Trips.API;
 
 namespace Trips.Tests.Base
 {
@@ -15,11 +17,10 @@ namespace Trips.Tests.Base
         [SetUp]
         protected virtual void SetUp()
         {
-            client = ServiceResolver
-                        .ResolveService<IHttpClientFactory>()
-                            .CreateClient();
+            var application = new WebApplicationFactory<Program>()
+                .WithWebHostBuilder(builder => { });
 
-            client.BaseAddress = new Uri("https://tripsmanager.azurewebsites.net/api/");
+            client = application.CreateClient();
         }
 
         protected static StringContent PrepareHttpContent<T>(T model)

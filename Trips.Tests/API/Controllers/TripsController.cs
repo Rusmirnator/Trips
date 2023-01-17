@@ -13,7 +13,7 @@ namespace Trips.Tests.API.Controllers
         [TestCase("Switzerland")]
         public async Task GetTripsAsync_Ok(string searchTerm)
         {
-            var endpoint = $"trips?{nameof(searchTerm)}={WebUtility.UrlEncode(searchTerm)}";
+            var endpoint = $"/api/trips?{nameof(searchTerm)}={WebUtility.UrlEncode(searchTerm)}";
 
             var response = await client.GetAsync(endpoint);
 
@@ -24,7 +24,7 @@ namespace Trips.Tests.API.Controllers
         [TestCase("Vintage Experience")]
         public async Task GetTripDetailsAsync_OkOrNotFound(string uniqueNameIdentifier)
         {
-            var endpoint = $"trips/detail?{nameof(uniqueNameIdentifier)}={WebUtility.UrlEncode(uniqueNameIdentifier)}";
+            var endpoint = $"/api/trips/detail?{nameof(uniqueNameIdentifier)}={WebUtility.UrlEncode(uniqueNameIdentifier)}";
 
             var response = await client.GetAsync(endpoint);
 
@@ -35,7 +35,7 @@ namespace Trips.Tests.API.Controllers
         [TestCase("")]
         public async Task GetTripDetailsAsync_BadRequest(string uniqueNameIdentifier)
         {
-            var endpoint = $"trips/detail?{nameof(uniqueNameIdentifier)}={WebUtility.UrlEncode(uniqueNameIdentifier)}";
+            var endpoint = $"/api/trips/detail?{nameof(uniqueNameIdentifier)}={WebUtility.UrlEncode(uniqueNameIdentifier)}";
 
             var response = await client.GetAsync(endpoint);
 
@@ -58,7 +58,7 @@ namespace Trips.Tests.API.Controllers
                 NumberOfSeats = numberOfSeats
             };
 
-            var endpoint = $"trips";
+            var endpoint = $"/api/trips";
 
             var response = await client.PostAsync(endpoint, PrepareHttpContent(newData));
 
@@ -79,7 +79,7 @@ namespace Trips.Tests.API.Controllers
                 NumberOfSeats = numberOfSeats
             };
 
-            var endpoint = $"trips";
+            var endpoint = $"/api/trips";
 
             var response = await client.PostAsync(endpoint, PrepareHttpContent(newData));
 
@@ -107,7 +107,7 @@ namespace Trips.Tests.API.Controllers
                 }
             };
 
-            var endpoint = $"trips";
+            var endpoint = $"/api/trips";
 
             var response = await client.PutAsync(endpoint, PrepareHttpContent(newData));
 
@@ -136,7 +136,7 @@ namespace Trips.Tests.API.Controllers
                 }
             };
 
-            var endpoint = $"trips";
+            var endpoint = $"/api/trips";
 
             var response = await client.PutAsync(endpoint, PrepareHttpContent(newData));
 
@@ -158,7 +158,7 @@ namespace Trips.Tests.API.Controllers
                 MailAddress = email
             };
 
-            var endpoint = $"trips";
+            var endpoint = $"/api/trips";
 
             var response = await client.PatchAsync(endpoint, PrepareHttpContent(newData));
 
@@ -180,7 +180,7 @@ namespace Trips.Tests.API.Controllers
                 MailAddress = email
             };
 
-            var endpoint = $"trips";
+            var endpoint = $"/api/trips";
 
             var response = await client.PatchAsync(endpoint, PrepareHttpContent(newData));
 
@@ -196,7 +196,7 @@ namespace Trips.Tests.API.Controllers
         [TestCase("a")]
         public async Task DeleteTripAsync_ValidModel(string uniqueNameIdentifier)
         {
-            HttpRequestMessage request = new(HttpMethod.Delete, $"trips?{nameof(uniqueNameIdentifier)}={uniqueNameIdentifier}");
+            HttpRequestMessage request = new(HttpMethod.Delete, $"/api/trips?{nameof(uniqueNameIdentifier)}={uniqueNameIdentifier}");
 
             var response = await client.SendAsync(PrepareHeaders(request));
 
@@ -209,7 +209,7 @@ namespace Trips.Tests.API.Controllers
         [TestCase("")]
         public async Task DeleteTripAsync_InvalidModel(string uniqueNameIdentifier)
         {
-            HttpRequestMessage request = new(HttpMethod.Delete, $"trips?{nameof(uniqueNameIdentifier)}={uniqueNameIdentifier}");
+            HttpRequestMessage request = new(HttpMethod.Delete, $"/api/trips?{nameof(uniqueNameIdentifier)}={uniqueNameIdentifier}");
 
             var response = await client.SendAsync(PrepareHeaders(request));
 
