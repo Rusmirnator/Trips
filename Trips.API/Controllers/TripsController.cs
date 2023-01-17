@@ -24,6 +24,11 @@ namespace Trips.API.Controllers
         #region Request Handlers
 
         #region GET
+        /// <summary>
+        /// Get all trips, or filtered if parameter is provided.
+        /// </summary>
+        /// <param name="searchTerm">Optional search term - needs to be provided by whole word.</param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> GetTripsAsync([FromQuery] string? searchTerm = null)
         {
@@ -34,9 +39,13 @@ namespace Trips.API.Controllers
             return Ok(trips);
         }
 
+        /// <summary>
+        /// Gets detailed information about single trip.
+        /// </summary>
+        /// <param name="uniqueNameIdentifier">Name identifier of the desired trip.</param>
+        /// <returns></returns>
         [HttpGet("detail")]
-        public async Task<IActionResult> GetTripDetailsAsync(
-            [FromQuery] string uniqueNameIdentifier)
+        public async Task<IActionResult> GetTripDetailsAsync([FromQuery] string uniqueNameIdentifier)
         {
             TripDetailsResponseModel? selectedTrip = await tripService.GetTripDetailsAsync(uniqueNameIdentifier);
 
@@ -50,9 +59,13 @@ namespace Trips.API.Controllers
         #endregion
 
         #region POST
+        /// <summary>
+        /// Creates new trip.
+        /// </summary>
+        /// <param name="newData">A create request model for trip.</param>
+        /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> CreateTripAsync(
-            [FromBody] TripDetailsRequestModel newData)
+        public async Task<IActionResult> CreateTripAsync([FromBody] TripDetailsRequestModel newData)
         {
             if (!ModelState.IsValid)
             {
@@ -71,6 +84,11 @@ namespace Trips.API.Controllers
         #endregion
 
         #region PUT
+        /// <summary>
+        /// Updates provided detailed trip data.
+        /// </summary>
+        /// <param name="updatedData">An update request model for trip.</param>
+        /// <returns></returns>
         [HttpPut]
         public async Task<IActionResult> UpdateTripAsync([FromBody] TripDetailsRequestModel updatedData)
         {
@@ -91,6 +109,11 @@ namespace Trips.API.Controllers
         #endregion
 
         #region PATCH
+        /// <summary>
+        /// Registers provided user to provided trip.
+        /// </summary>
+        /// <param name="patchData">A register request model</param>
+        /// <returns></returns>
         [HttpPatch]
         public async Task<IActionResult> RegisterForTripAsync([FromBody] ParticipantRequestModel patchData)
         {
@@ -118,6 +141,11 @@ namespace Trips.API.Controllers
         #endregion
 
         #region DELETE
+        /// <summary>
+        /// Deletes desired trip.
+        /// </summary>
+        /// <param name="uniqueNameIdentifier">Name identifier of trip to be deleted.</param>
+        /// <returns></returns>
         [HttpDelete]
         public async Task<IActionResult> DeleteTripAsync([FromQuery][Required] string uniqueNameIdentifier)
         {
