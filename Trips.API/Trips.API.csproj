@@ -21,5 +21,6 @@
 	
     <ItemGroup>
 	    <InternalsVisibleTo Include="Trips.Tests" />
+	    <InternalsVisibleTo Include="Trips.IntegrationTests" />
     </ItemGroup>
 </Project>
