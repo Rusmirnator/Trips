@@ -30,6 +30,7 @@ namespace Trips.API.Controllers
         /// <param name="searchTerm">Optional search term - needs to be provided by whole word.</param>
         /// <returns></returns>
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TripResponseModel>))]
         public async Task<IActionResult> GetTripsAsync([FromQuery] string? searchTerm = null)
         {
             IEnumerable<TripResponseModel> trips =
@@ -45,6 +46,8 @@ namespace Trips.API.Controllers
         /// <param name="uniqueNameIdentifier">Name identifier of the desired trip.</param>
         /// <returns></returns>
         [HttpGet("detail")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TripDetailsResponseModel))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetTripDetailsAsync([FromQuery] string uniqueNameIdentifier)
         {
             TripDetailsResponseModel? selectedTrip = await tripService.GetTripDetailsAsync(uniqueNameIdentifier);
@@ -65,6 +68,9 @@ namespace Trips.API.Controllers
         /// <param name="newData">A create request model for trip.</param>
         /// <returns></returns>
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(TripDetailsRequestModel))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         public async Task<IActionResult> CreateTripAsync([FromBody] TripDetailsRequestModel newData)
         {
             if (!ModelState.IsValid)
@@ -90,6 +96,9 @@ namespace Trips.API.Controllers
         /// <param name="updatedData">An update request model for trip.</param>
         /// <returns></returns>
         [HttpPut]
+        [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(TripDetailsRequestModel))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         public async Task<IActionResult> UpdateTripAsync([FromBody] TripDetailsRequestModel updatedData)
         {
             if (!ModelState.IsValid)
@@ -115,6 +124,9 @@ namespace Trips.API.Controllers
         /// <param name="patchData">A register request model</param>
         /// <returns></returns>
         [HttpPatch]
+        [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(ParticipantRequestModel))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         public async Task<IActionResult> RegisterForTripAsync([FromBody] ParticipantRequestModel patchData)
         {
             if (!ModelState.IsValid)
@@ -147,6 +159,9 @@ namespace Trips.API.Controllers
         /// <param name="uniqueNameIdentifier">Name identifier of trip to be deleted.</param>
         /// <returns></returns>
         [HttpDelete]
+        [ProducesResponseType(StatusCodes.Status202Accepted)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         public async Task<IActionResult> DeleteTripAsync([FromQuery][Required] string uniqueNameIdentifier)
         {
             if (!ModelState.IsValid)
