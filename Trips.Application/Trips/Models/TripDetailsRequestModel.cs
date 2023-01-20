@@ -13,6 +13,5 @@ namespace Trips.Application.Trips.Models
         public string? Description { get; set; }
         [Range(0, 100, ErrorMessage = "Number of seats must have a value between 0 and 100!")]
         public int? NumberOfSeats { get; set; }
-        public TripRequestModel? OutdatedData { get; set; }
     }
 }

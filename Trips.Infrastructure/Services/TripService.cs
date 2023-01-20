@@ -81,21 +81,21 @@ namespace Trips.Infrastructure.Services
             return await context.SaveChangesAsync();
         }
 
-        public async Task<IConveyOperationResult> UpdateTripAsync(TripDetailsRequestModel updatedData)
+        public async Task<IConveyOperationResult> UpdateTripAsync(string uniqueNameIdentifier, TripDetailsRequestModel updatedData)
         {
-            if (updatedData.OutdatedData is null)
+            if (string.IsNullOrEmpty(uniqueNameIdentifier))
             {
-                return new OperationResultModel(false, $"Input data is not sufficient - Outdated data not provided!");
+                return new OperationResultModel(false, $"Input data is not sufficient - Outdated data identifier not provided!");
             }
 
-            Trip? existingTrip = await GetTripByNameAsync(updatedData.OutdatedData?.Name, false);
+            Trip? existingTrip = await GetTripByNameAsync(uniqueNameIdentifier, false);
 
             if (existingTrip is null)
             {
-                return new OperationResultModel(false, $"Trip with the given name '{updatedData.OutdatedData!.Name}' not exists!");
+                return new OperationResultModel(false, $"Trip with the given name '{uniqueNameIdentifier}' not exists!");
             }
 
-            if (updatedData.OutdatedData!.Name?.Equals(existingTrip.Name, StringComparison.Ordinal) == false
+            if (uniqueNameIdentifier.Equals(existingTrip.Name, StringComparison.Ordinal) == false
                 && await GetTripByNameAsync(updatedData.Name, false) is Trip duplicateTrip)
             {
                 return new OperationResultModel(false, $"Trip with the given name '{duplicateTrip.Name}' already exists!");

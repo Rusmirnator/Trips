@@ -44,6 +44,50 @@ namespace Trips.Infrastructure.Persistence.Configurations
                                                 Environment.NewLine,
                                                 "Take your backpack and feel the clear air of southern mountains."),
                     NumberOfSeats = 8
+                },
+                new Trip
+                {
+                    Id = 3,
+                    Name = "ToDelete",
+                    Country = "Spain",
+                    StartDate = DateTime.Now.AddDays(14),
+                    Description = string.Concat("Let's hike!",
+                                                Environment.NewLine,
+                                                "Take your backpack and feel the clear air of southern mountains."),
+                    NumberOfSeats = 8
+                },
+                new Trip
+                {
+                    Id = 4,
+                    Name = "ToDeleteTwo",
+                    Country = "Spain",
+                    StartDate = DateTime.Now.AddDays(14),
+                    Description = string.Concat("Let's hike!",
+                                            Environment.NewLine,
+                                            "Take your backpack and feel the clear air of southern mountains."),
+                    NumberOfSeats = 8
+                },
+                new Trip
+                {
+                    Id = 5,
+                    Name = "ToFind",
+                    Country = "Spain",
+                    StartDate = DateTime.Now.AddDays(14),
+                    Description = string.Concat("Let's hike!",
+                                            Environment.NewLine,
+                                            "Take your backpack and feel the clear air of southern mountains."),
+                    NumberOfSeats = 8
+                },
+                new Trip
+                {
+                    Id = 6,
+                    Name = "ToFindTwo",
+                    Country = "Spain",
+                    StartDate = DateTime.Now.AddDays(14),
+                    Description = string.Concat("Let's hike!",
+                                                Environment.NewLine,
+                                                "Take your backpack and feel the clear air of southern mountains."),
+                    NumberOfSeats = 8
                 });
         }
     }

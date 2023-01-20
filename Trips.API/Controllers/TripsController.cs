@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using System.Net;
 using Trips.Application.Common.Interfaces;
 using Trips.Application.Trips.Interfaces;
 using Trips.Application.Trips.Models;
@@ -27,15 +28,15 @@ namespace Trips.API.Controllers
         /// <summary>
         /// Get all trips, or filtered if parameter is provided.
         /// </summary>
-        /// <param name="searchTerm">Optional search term - needs to be provided by whole word.</param>
+        /// <param name="fullCountryName">Optional search term - needs to be provided by whole word.</param>
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TripResponseModel>))]
-        public async Task<IActionResult> GetTripsAsync([FromQuery] string? searchTerm = null)
+        public async Task<IActionResult> GetTripsAsync([FromQuery] string? fullCountryName = null)
         {
             IEnumerable<TripResponseModel> trips =
-                string.IsNullOrEmpty(searchTerm)
-                    ? await tripService.GetTripsAsync() : await tripService.GetTripsBySearchTermAsync(searchTerm);
+                string.IsNullOrEmpty(fullCountryName)
+                    ? await tripService.GetTripsAsync() : await tripService.GetTripsBySearchTermAsync(fullCountryName);
 
             return Ok(trips);
         }
@@ -45,12 +46,13 @@ namespace Trips.API.Controllers
         /// </summary>
         /// <param name="uniqueNameIdentifier">Name identifier of the desired trip.</param>
         /// <returns></returns>
-        [HttpGet("detail")]
+        [HttpGet("{uniqueNameIdentifier}/details")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TripDetailsResponseModel))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetTripDetailsAsync([FromQuery] string uniqueNameIdentifier)
+        public async Task<IActionResult> GetTripDetailsAsync([FromRoute][Required] string uniqueNameIdentifier)
         {
-            TripDetailsResponseModel? selectedTrip = await tripService.GetTripDetailsAsync(uniqueNameIdentifier);
+            TripDetailsResponseModel? selectedTrip =
+                await tripService.GetTripDetailsAsync(WebUtility.UrlDecode(uniqueNameIdentifier));
 
             if (selectedTrip is null)
             {
@@ -70,12 +72,11 @@ namespace Trips.API.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(TripDetailsRequestModel))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         public async Task<IActionResult> CreateTripAsync([FromBody] TripDetailsRequestModel newData)
         {
             if (!ModelState.IsValid)
             {
-                return UnprocessableEntity(ModelState);
+                return BadRequest(ModelState);
             }
 
             IConveyOperationResult result = await tripService.CreateTripAsync(newData);
@@ -93,62 +94,29 @@ namespace Trips.API.Controllers
         /// <summary>
         /// Updates provided detailed trip data.
         /// </summary>
+        /// <param name="uniqueNameIdentifier">Unique identifier of the trip to be updated.</param>
         /// <param name="updatedData">An update request model for trip.</param>
         /// <returns></returns>
-        [HttpPut]
-        [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(TripDetailsRequestModel))]
+        [HttpPut("{uniqueNameIdentifier}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-        public async Task<IActionResult> UpdateTripAsync([FromBody] TripDetailsRequestModel updatedData)
+        public async Task<IActionResult> UpdateTripAsync(
+            [FromRoute] string uniqueNameIdentifier, [FromBody] TripDetailsRequestModel updatedData)
         {
             if (!ModelState.IsValid)
             {
-                return UnprocessableEntity(ModelState);
+                return BadRequest(ModelState);
             }
 
-            IConveyOperationResult result = await tripService.UpdateTripAsync(updatedData);
+            IConveyOperationResult result =
+                await tripService.UpdateTripAsync(WebUtility.UrlDecode(uniqueNameIdentifier), updatedData);
 
             if (!result.IsSuccessful)
             {
                 return BadRequest(result.Message);
             }
 
-            return AcceptedAtAction(nameof(UpdateTripAsync), updatedData);
-        }
-        #endregion
-
-        #region PATCH
-        /// <summary>
-        /// Registers provided user to provided trip.
-        /// </summary>
-        /// <param name="patchData">A register request model</param>
-        /// <returns></returns>
-        [HttpPatch]
-        [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(ParticipantRequestModel))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-        public async Task<IActionResult> RegisterForTripAsync([FromBody] ParticipantRequestModel patchData)
-        {
-            if (!ModelState.IsValid)
-            {
-                return UnprocessableEntity(ModelState);
-            }
-            /// seems better to place it here than in service
-            if (patchData.MailAddress!.Contains(' ', StringComparison.Ordinal))
-            {
-                ModelState.AddModelError(nameof(patchData.MailAddress), "E-mail address cannot contain whitespaces!");
-
-                return UnprocessableEntity(ModelState);
-            }
-
-            IConveyOperationResult result = await tripService.RegisterParticipantAsync(patchData);
-
-            if (!result.IsSuccessful)
-            {
-                return BadRequest(result.Message);
-            }
-
-            return AcceptedAtAction(nameof(RegisterForTripAsync), patchData);
+            return NoContent();
         }
         #endregion
 
@@ -158,25 +126,25 @@ namespace Trips.API.Controllers
         /// </summary>
         /// <param name="uniqueNameIdentifier">Name identifier of trip to be deleted.</param>
         /// <returns></returns>
-        [HttpDelete]
-        [ProducesResponseType(StatusCodes.Status202Accepted)]
+        [HttpDelete("{uniqueNameIdentifier}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-        public async Task<IActionResult> DeleteTripAsync([FromQuery][Required] string uniqueNameIdentifier)
+        public async Task<IActionResult> DeleteTripAsync([FromRoute][Required] string uniqueNameIdentifier)
         {
             if (!ModelState.IsValid)
             {
-                return UnprocessableEntity(ModelState);
+                return BadRequest(ModelState);
             }
 
-            IConveyOperationResult result = await tripService.DeleteTripAsync(uniqueNameIdentifier);
+            IConveyOperationResult result = await tripService.DeleteTripAsync(WebUtility.UrlDecode(uniqueNameIdentifier));
 
             if (!result.IsSuccessful)
             {
                 return NotFound(result.Message);
             }
 
-            return Accepted();
+            return NoContent();
         }
         #endregion
 

@@ -50,14 +50,10 @@ namespace Trips.Tests.Infrastructure.Services
         {
             TripDetailsRequestModel newTrip = new()
             {
-                Name = uniqueName,
-                OutdatedData = new TripRequestModel
-                {
-                    Name = outdatedDataName
-                }
+                Name = uniqueName
             };
 
-            IConveyOperationResult res = await tripService!.UpdateTripAsync(newTrip);
+            IConveyOperationResult res = await tripService!.UpdateTripAsync(outdatedDataName, newTrip);
 
             return res.IsSuccessful;
         }
